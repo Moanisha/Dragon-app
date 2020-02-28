@@ -49,6 +49,16 @@ app.locals.engine = engine;
 app.use('/dragon', dragonRouter)
 app.use('/generation', generationRouter)
 
+//Error handler
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+
+    res.status(statusCode).json({
+        type: 'error',
+        message: err.message
+    })
+});
+
 // Instead of directly using it in index.js file, creating a new api folder and using Router from express
 
 // app.get('/dragon/new', (req, res) => {

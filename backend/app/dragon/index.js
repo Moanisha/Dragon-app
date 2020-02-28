@@ -1,4 +1,4 @@
-const TRAITS = require('../data/traits');
+const TRAITS = require('../../data/traits');
 
 const DEFAULT_PROPERTIES = {
     nickname: 'name me',
@@ -14,13 +14,16 @@ const DEFAULT_PROPERTIES = {
             traits.push({traitType, traitValue});
         });
         return traits;
-    }
+    },
+    generationId : undefined
 }
 class Dragon {
-    constructor({birthdate, nickname, traits} = {}){
+    constructor({birthdate, nickname, traits, generationId} = {}){
         this.birthdate = birthdate || DEFAULT_PROPERTIES.birthdate;
         this.nickname = nickname || DEFAULT_PROPERTIES.nickname;
         this.traits = traits || DEFAULT_PROPERTIES.randomTraits;
+        this.generationId = generationId || DEFAULT_PROPERTIES.generationId;
+        this.dragonId = undefined;
     }
 }
 
