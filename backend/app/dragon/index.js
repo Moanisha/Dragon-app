@@ -1,6 +1,7 @@
 const TRAITS = require('../../data/traits');
 
 const DEFAULT_PROPERTIES = {
+    dragonId: undefined,
     nickname: 'name me',
     // birthdate: new Date(),    => Not used since this date gets set when index.js file is launched and timeout doesn't gets applied
     get birthdate() {
@@ -18,12 +19,12 @@ const DEFAULT_PROPERTIES = {
     generationId : undefined
 }
 class Dragon {
-    constructor({birthdate, nickname, traits, generationId} = {}){
+    constructor({dragonId, birthdate, nickname, traits, generationId} = {}){
         this.birthdate = birthdate || DEFAULT_PROPERTIES.birthdate;
         this.nickname = nickname || DEFAULT_PROPERTIES.nickname;
         this.traits = traits || DEFAULT_PROPERTIES.randomTraits;
         this.generationId = generationId || DEFAULT_PROPERTIES.generationId;
-        this.dragonId = undefined;
+        this.dragonId = dragonId || DEFAULT_PROPERTIES.dragonId;
     }
 }
 
