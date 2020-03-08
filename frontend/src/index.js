@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import {createStore, applyMiddleware} from 'redux';
 import Root from './components/Root'
 import thunk from 'redux-thunk';
+import {fetchAuthenticated} from './actions/account';
 import rootReducer  from './reducers';
 import { Provider } from 'react-redux';
 import './index.css';
@@ -58,10 +59,12 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 // .then(json => {
 //     store.dispatch(generationActionCreator(json.generation))
 // })
-
-render(
-    <Provider store={store}>
-       <Root/>
-    </Provider>,
-    document.getElementById('root')
-);
+store.dispatch(fetchAuthenticated())
+.then(()=>{
+    render(
+        <Provider store={store}>
+           <Root/>
+        </Provider>,
+        document.getElementById('root')
+    );
+})

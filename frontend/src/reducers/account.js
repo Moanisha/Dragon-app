@@ -11,6 +11,8 @@ const accountReducer = (state = DEFAULT_ACCOUNT, action) => {
             return {...state, message: action.message, status: fetchStates.error}
         case ACCOUNT.FETCH_SUCCESS:
             return {...state, ...action.message, status: fetchStates.success, loggedIn: true}
+        case ACCOUNT.FETCH_AUTHENTICATION_SUCCESS:
+            return {...state, ...action.message, status: fetchStates.success, loggedIn: action.authenticated}
         case ACCOUNT.FETCH_LOGOUT_SUCCESS:
             return {...state, ...action.message, status:fetchStates.success, loggedIn: false}
         default:

@@ -1,9 +1,11 @@
 const {Router} = require('express');
 const AccountTable = require('../account/table');
+const AccountDragonTable = require('../accountDragon/table');
 const {hash} = require('../account/helper');
-const setSession = require('./helper')
+const {setSession, authenticated } = require('./helper')
 const router = new Router();
 const Session = require('../account/session');
+const {getDragonWithTraits} = require('../dragon/helper');
 
 router.post('/signup',(req,res,next)=>{
     const {username, password} = req.body;
@@ -62,6 +64,30 @@ router.get('/logout', (req, res, next) => {
         res.json({message: 'Successful logout'})
     })
     .catch((err)=>next(err));
+})
+
+router.get('/authenticated', (req,res,next) => {
+    authenticated({sessionString: req.cookies.sessionString})
+    .then(({authenticated})=>{res.json({authenticated})})
+    .catch(error => next(error));
+})
+
+router.get('/dragons', (req,res,next) => {
+    authenticated({sessionString: req.cookies.sessionString})
+    .then(({account})=>{
+        return AccountDragonTable.getAccountDragon({accountId: account.id})
+    })
+    .then(({accountDragons})=> {
+        return Promise.all(
+            accountDragons.map(accountDragon => {
+                return getDragonWithTraits({dragonId: accountDragon.dragonId})
+            })
+        )
+    })
+    .then(dragons =>
+        res.json({dragons})
+    )
+    .catch(error => next(error))
 })
 
 module.exports = router;
