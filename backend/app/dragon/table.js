@@ -46,6 +46,22 @@ class DragonTable {
             )
         })
     }
+
+    static updateDragon({dragonId, nickname}) {
+        return new Promise((resolve, reject) => {
+            pool.query(
+                `UPDATE dragon
+                 SET nickname = $1
+                 WHERE dragon.id = $2`,
+                 [nickname, dragonId],
+                 (error, response) => {
+                     if(error) return reject(error)
+
+                     resolve()
+                 }
+            )
+        })
+    }
 }
 
 module.exports = DragonTable;

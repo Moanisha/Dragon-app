@@ -6,6 +6,9 @@ import thunk from 'redux-thunk';
 import {fetchAuthenticated} from './actions/account';
 import rootReducer  from './reducers';
 import { Provider } from 'react-redux';
+import {Router, Route, Switch, Redirect} from 'react-router-dom';
+import AccountDragons from './components/AccountDragons';
+import createBrowserHistory from 'history/createBrowserHistory';
 import './index.css';
 
 // const DEFAULT_GENERATION = {generationId: '', expiration:''};
@@ -59,11 +62,27 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 // .then(json => {
 //     store.dispatch(generationActionCreator(json.generation))
 // })
+
+//Higher order functions: Takes component as property and returns a component as a result
+const AuthRoute = props => {
+    if(!store.getState().account.loggedIn){
+        return <Redirect to={{pathname:'/'}}></Redirect>
+    }
+
+    const {path, component} = props;
+    return <Route path={path} component={component}></Route>
+}
+
 store.dispatch(fetchAuthenticated())
 .then(()=>{
     render(
         <Provider store={store}>
-           <Root/>
+           <Router history={createBrowserHistory()}>
+               <Switch>
+                   <Route exact path='/' component={Root}/>
+                   <AuthRoute path='/account-dragons' component={AccountDragons}/>
+               </Switch>
+           </Router>
         </Provider>,
         document.getElementById('root')
     );

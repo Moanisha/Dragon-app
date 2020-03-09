@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const dragonTable = require('../dragon/table');
+const DragonTable = require('../dragon/table');
 const {authenticated} = require('./helper');
 const AccountDragonTable = require('../accountDragon/table');
 const router = new Router();
@@ -12,7 +12,7 @@ router.get('/new', (req, res, next) => {
         ({account})=> {
             accountId = account.id;
             dragon = req.app.locals.engine.generation.newDragon();
-            return dragonTable.storeDragon(dragon)    
+            return DragonTable.storeDragon(dragon)    
         }
     )
     .then(
@@ -23,6 +23,14 @@ router.get('/new', (req, res, next) => {
     .then(()=>{
         res.json({dragon});
     })
+    .catch(error => next(error));
+})
+
+router.put('/update',(req, res, next)=>{
+    const {dragonId, nickname} = req.body;
+
+    DragonTable.updateDragon({dragonId, nickname})
+    .then(()=> res.json({message: 'Dragon updated successfully'}))
     .catch(error => next(error));
 })
 
